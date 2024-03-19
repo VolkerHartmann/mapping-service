@@ -122,6 +122,9 @@ echo Build service...
 echo "Copy configuration to '$INSTALLATION_DIRECTORY'..."
 find ./settings -name application-default.properties -exec cp '{}' "$INSTALLATION_DIRECTORY"/application.properties.temp \;
 
+echo "Copy logging configuration to '$INSTALLATION_DIRECTORY'..."
+cp logback-spring.xml "$INSTALLATION_DIRECTORY"
+
 ################################################################################
 # Replace constants
 ################################################################################
@@ -147,6 +150,8 @@ mkdir "$INSTALLATION_DIRECTORY"/plugins
 echo "Create mapping directory"
 mkdir "$INSTALLATION_DIRECTORY"/mappingSchemas
 
+echo "Create logging directory"
+mkdir "$INSTALLATION_DIRECTORY"/log
 ###############################################################################
 # Create run script
 ################################################################################
