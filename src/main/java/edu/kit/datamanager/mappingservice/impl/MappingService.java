@@ -262,7 +262,7 @@ public class MappingService {
      * @param mapping record of mapping
      * @throws IOException error writing file.
      */
-    private void deleteMappingFile(MappingRecord mapping) throws IOException {
+    public void deleteMappingFile(MappingRecord mapping) throws IOException {
         if ((mapping != null) && (mapping.getMappingDocumentUri() != null)) {
             LOGGER.debug("Delete mapping file '{}'", mapping.getMappingDocumentUri());
             Path deleteFile = Paths.get(mapping.getMappingDocumentUri());

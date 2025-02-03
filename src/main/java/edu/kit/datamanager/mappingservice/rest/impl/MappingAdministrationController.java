@@ -58,6 +58,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
 
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
@@ -254,6 +255,19 @@ public class MappingAdministrationController implements IMappingAdministrationCo
         String contentRange = ControllerUtils.getContentRangeHeader(pgbl.getPageNumber(), pgbl.getPageSize(), records.getTotalElements());
         if (!records.isEmpty()) {
             LOG.trace("Returning {} mapping record(s) in content range {}.", recordList.size(), contentRange);
+            for (MappingRecord item: recordList) {
+              LOG.trace("MappingRecord: '{}'", item);
+              LOG.trace("MappingID: '{}'", item.getMappingId().getBytes());
+              if (item.getMappingId().getBytes().length < 2) {
+                try {
+                  mappingRecordDao.delete(item);
+                  LOG.info("Delete mapping record due to missing id!");
+                  mappingService.deleteMappingFile(item);
+                } catch (IOException ex) {
+                  LOG.error("Error removing mapping record with empty id! :-(", ex);
+                }
+              }
+            }
             return ResponseEntity.status(HttpStatus.OK).header("Content-Range", contentRange).body(records.getContent());
         } else {
             LOG.trace("Returning empty list of results.");
